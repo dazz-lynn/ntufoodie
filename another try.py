@@ -4,7 +4,6 @@ Created on Tue Nov  6 15:42:24 2018
 
 @author: Administrator
 """
-#hello hello test
 #the information of the stalls in each canteen
 #Keys --> canteen names
 #values --> lists of lists of lists,the most nested is a list of food categories,
