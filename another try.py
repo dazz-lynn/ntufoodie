@@ -321,12 +321,12 @@ def display_distance():
                 pos1= canteen_coords[sort_by_distance(to_sort)[0][0]]
                 pygame.draw.circle(screen, (0,255,0) , pos1, 15, 3)  #highlights the location of the nearest canteen
                 pygame.display.update()
-                time.sleep(5)       #to display the location of the canteen long enough
-    main()
+                y = input("Do you wish to go to the nearest canteen?(Y/N)")      #normally, the nearest canteen is close enough that bus is not possible
+                if y.lower() == "y":                                            #but in case of an abnormally deserted situation
+                    getting_there(Coordinates, pos1)
     pygame.quit()
-    y = input("Do you wish to go to the nearest canteen?(Y/N)")      #normally, the nearest canteen is close enough that bus is not possible
-    if y.lower() == "y":                                            #but in case of an abnormally deserted situation
-        getting_there(Coordinates, pos1)
+    main()
+
     
     
 def bubblesort(list_):      #default version of bubblesort
