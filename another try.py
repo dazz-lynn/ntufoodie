@@ -4,6 +4,7 @@ Created on Tue Nov  6 15:42:24 2018
 
 @author: Administrator
 """
+
 #the information of the stalls in each canteen
 #Keys --> canteen names
 #values --> lists of lists of lists,the most nested is a list of food categories,
@@ -78,14 +79,14 @@ canteen_info = [["Food Court 1", "600PAX",  "7AM-11PM", 5], ["Food Court 2" , "4
 
 #the co-ordinates of all the canteens
 canteen_coords= {"Food Court 1": (372, 386),"Food Court 2": (351, 322),"Food Court 9": (351, 188),\
-                 "Food Court 11": (388, 93), "Food Court 13" : (200, 205), "Food Court 14" : (200, 205),\
+                 "Food Court 11": (388, 93), "Food Court 13" : (200, 205), "Food Court 14" : (241, 173),\
                  "Food Court 16" : (204, 257), "Foodgle Food Court":(340, 100), "North Hill Food Court":(446, 119),\
                  "Pioneer Food Court":(462, 400), "Koufu" : (244, 530), "North Spine" :(204, 390)}
 
 #pointdict needs to be updated
-PointDictionary = {"Point1": (175,259), "Point2": (111, 436), "Point3": (274, 358), "Point4": (310, 124),
-                   "Point5": (550, 70), "Point6": (455, 200), "Point7": (411, 325), "Point8": (631, 218),
-                   "Point9": (572, 542), "Point10": (313, 504), "Point11": (360, 621), "Point12": (142, 648)}
+PointDictionary = {"Point1": (157,232), "Point2": (108, 365), "Point3": (232, 305), "Point4": (263, 133),
+                   "Point5": (437, 89), "Point6": (368, 187), "Point7": (336, 283), "Point8": (500, 244),
+                   "Point9": (454, 441), "Point10": (210, 465), "Point11": (294, 504), "Point12": (137, 586)}
 
 #all the bus stops in the red loop and their co-ords
 BusStopRed = {"Bus Stop 1" : (367, 484) ,"Bus Stop 2" :  (434, 416) ,"Bus Stop 3" : (357, 302),
@@ -154,6 +155,8 @@ def display_food():
                 elif back.collidepoint(pos):
                     main()
                     break
+                else:
+                    continue
                 search_by_food(food,stall_info)#calls another function if a hitbox was clicked
     pygame.quit()
                 
@@ -233,6 +236,8 @@ def display_price():
                 elif back.collidepoint(pos):
                     main()
                     break
+                else: 
+                    continue
                 print("You can patronise these stalls which are within your budget:")
                 search_by_prices(price)  #calling another function using the value selected
     pygame.quit()
@@ -321,12 +326,14 @@ def display_distance():
                 pos1= canteen_coords[sort_by_distance(to_sort)[0][0]]
                 pygame.draw.circle(screen, (0,255,0) , pos1, 15, 3)  #highlights the location of the nearest canteen
                 pygame.display.update()
-                y = input("Do you wish to go to the nearest canteen?(Y/N)")      #normally, the nearest canteen is close enough that bus is not possible
-                if y.lower() == "y":                                            #but in case of an abnormally deserted situation
-                    getting_there(Coordinates, pos1)
-    pygame.quit()
+                time.sleep(5)       #to display the location of the canteen long enough
+            else:
+                continue
     main()
-
+    pygame.quit()
+    y = input("Do you wish to go to the nearest canteen?(Y/N)")      #normally, the nearest canteen is close enough that bus is not possible
+    if y.lower() == "y":                                            #but in case of an abnormally deserted situation
+        getting_there(Coordinates, pos1)
     
     
 def bubblesort(list_):      #default version of bubblesort
@@ -399,6 +406,8 @@ def display_map():
                 pygame.display.update()
                 time.sleep(1)
                 done = False
+            else:
+                continue
     getting_there(CurrentCoordinates, DestiCoordinates)  #calling another function to advice method of transport
     main()
 
@@ -459,6 +468,8 @@ def LoopDistance(Point1, Point2, Loop):
             NewList2 = Loop[Index1:Index2-1:-1]
         elif Index2 == 0:
             NewList2 = Loop[Index1::-1] #NewList1 goes from left to right; NewList2 opposite direction
+    elif Index1 == Index2:
+        return 0
     list1 = []
     list2 = []
     Sum1 = 0
@@ -634,6 +645,43 @@ def busstop(CurrentCoordinates, DestiCoordinates):
                " then take to " + DestinationR + " and walk " + str(round(shortest_dist2_R[1]* 3.2767 )) + " metres.")
         print ("To take the blue line, walk " + str(round(shortest_dist1_B[1]* 3.2767 )) + " metres to " + CurrentB +\
                " then take to " + DestinationB + " and walk " + str(round(shortest_dist2_B[1]* 3.2767 )) + " metres.")
+        while True:
+            choice = input("Do you want to display BLUE or RED loop?:(B/R): ")  #asks the user to choose to display either the red or blue loop
+            if choice.lower()== "b":
+                choice1 = CurrentB
+                choice2 = DestinationB
+                list1 = BusStopBlue
+                map1 = "NTU blue loop.png"
+                break
+            elif choice.lower() == "r":
+                choice1 = CurrentR
+                choice2 = DestinationR
+                list1 = BusStopRed
+                map1 = "NTU red loop.png"
+                break
+            else: 
+                print ("Invalid input! Please retry!:")
+                continue
+        introScreenImage = pygame.image.load(map1) #creates a map of the chosen loop
+        screen = pygame.display.set_mode((545,648))
+        screen.blit(introScreenImage,(0,0))
+        color = (0, 255, 0)
+        pos1 = list1[choice1]   #the list that is accessed depends on the user input
+        pos2 = list1[choice2]
+        pygame.draw.circle(screen, color , pos1, 15, 3)    #indicates the start and ending bus stops
+        pygame.draw.circle(screen, color, pos2, 15, 3)
+        pygame.display.update()
+        pygame.display.flip()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    if back1.collidepoint(pos):
+                        main()
+                        pygame.quit()
         
 #function to get the coordinates from a mouseclick   
 def mouseclick():
@@ -699,14 +747,15 @@ def display_canteenlist():
                 elif back.collidepoint(pos):
                     main()
                     break
-                pygame.quit()
-                return canteen
+                else:
+                    continue
                 done = False
     pygame.quit()
+    return canteen
                 
 #intermediate function that combines the UI function and the algorithmic function
 def display_updateinfo():
-    x=display_canteenlist()
+    x = display_canteenlist()
     update_info(x)
 
 
@@ -735,7 +784,13 @@ def update_info(cant):
                     input_stall = input("What is the name of the stall?:").title()
                     temp = input("What does this store sell? You can enter multiple categories, separated by commas:").title()
                     input_category = list(temp.split(','))
-                    input_price = input("What is the average price of this stall?:")
+                    while True:
+                        try:
+                            input_price = input("What is the average price of this stall?:")
+                            input_price = int(input_price)
+                            break
+                        except ValueError:
+                            print("Only numbers allowed! Try again!")
                     stall_info[cant].append([input_stall, input_category, input_price]) #adding a new dictionary entry in stall_info
                 elif food.collidepoint(pos):
                     list1= []
@@ -776,19 +831,22 @@ def update_info(cant):
                         input_price = input("What is the new average price of the stall?:")
                         try: 
                             val = int(input_price)
+                            if val > 20:
+                                print ("Maximum price is 20!")
+                            else:
+                                break   
                         except ValueError:
-                            print ("Only integer prices!")
-                        if val > 20:
-                            print ("Maximum price is 20!")
-                        else:
-                            break              
+                            print ("Only integer prices!")     
                     for stalls in stall_info[cant]:
                         if stalls[0] == input_stall:
                             i = stall_info[cant].index(stalls)
                             stall_info[cant][i][2]= input_price    #replacing the old price with the new price data
                 elif back.collidepoint(pos):
-                    pass
-                done = False
+                    pygame.quit()
+                    main()
+                else: 
+                    continue
+                done = False 
     temp = stall_info[cant]
     print (cant, " :")
     for x in temp:
@@ -849,6 +907,8 @@ def display_all():
                 elif back.collidepoint(pos):
                     main()
                     break
+                else: 
+                    continue
     pygame.quit()
     sys.exit()
     
@@ -876,19 +936,21 @@ def main():
                 pos = pygame.mouse.get_pos()
                 if food.collidepoint(pos):
                     display_food()
-                if price.collidepoint(pos):
+                elif price.collidepoint(pos):
                     display_price()
-                if rank.collidepoint(pos):
+                elif rank.collidepoint(pos):
                     print ("In our opinion, the canteens in NTU ranked in order are as follows:")
                     sort_by_rank(canteen_info)
-                if near_you.collidepoint(pos):
+                elif near_you.collidepoint(pos):
                     display_distance()
-                if getting_around.collidepoint(pos):
+                elif getting_around.collidepoint(pos):
                     display_map()
-                if update_info.collidepoint(pos):
+                elif update_info.collidepoint(pos):
                     display_updateinfo()
-                if show_all.collidepoint(pos):
+                elif show_all.collidepoint(pos):
                     display_all()
+                else:
+                    break
             if event.type == pygame.QUIT:
                 done = False
     pygame.quit()
@@ -899,8 +961,3 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100,30)
 #initialises pygame and starts main function
 pygame.init()
 main()
-
-    
-    
-
-    
