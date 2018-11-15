@@ -125,7 +125,6 @@ def display_food():
     back = pygame.Rect(158,524,145,40)
     done = True 
     while done:
-        time.sleep(0.2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:#quitting the programme using the exit button
                 pygame.quit()
@@ -204,7 +203,6 @@ def display_price():
     back = pygame.Rect(158, 564, 145, 45)
     done = True 
     while done:
-        time.sleep(0.2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -304,7 +302,6 @@ def display_distance():
     back = pygame.Rect(20,590,87,35)
     done = True 
     while done:
-        time.sleep(0.2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -326,14 +323,14 @@ def display_distance():
                 pos1= canteen_coords[sort_by_distance(to_sort)[0][0]]
                 pygame.draw.circle(screen, (0,255,0) , pos1, 15, 3)  #highlights the location of the nearest canteen
                 pygame.display.update()
-                time.sleep(5)       #to display the location of the canteen long enough
             else:
                 continue
-    main()
-    pygame.quit()
     y = input("Do you wish to go to the nearest canteen?(Y/N)")      #normally, the nearest canteen is close enough that bus is not possible
+    print("")
     if y.lower() == "y":                                            #but in case of an abnormally deserted situation
         getting_there(Coordinates, pos1)
+    main()
+    pygame.quit()
     
     
 def bubblesort(list_):      #default version of bubblesort
@@ -388,7 +385,6 @@ def display_map():
     back = pygame.Rect(20,590,87,35)
     done = True 
     while done:
-        time.sleep(0.2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -404,7 +400,6 @@ def display_map():
                 DestiCoordinates = mouseclick()
                 pygame.draw.circle(screen, (255,255, 255), DestiCoordinates, 4)
                 pygame.display.update()
-                time.sleep(1)
                 done = False
             else:
                 continue
@@ -713,7 +708,6 @@ def display_canteenlist():
     back = pygame.Rect(158, 523, 145, 45)
     done = True 
     while done:
-        time.sleep(0.2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -773,7 +767,6 @@ def update_info(cant):
     back = pygame.Rect(159, 355, 145, 45)
     done = True
     while done:
-        time.sleep(0.2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -869,7 +862,6 @@ def display_all():
     back = pygame.Rect(159, 355, 145, 45)
     done = True
     while done:
-        time.sleep(0.2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -928,9 +920,7 @@ def main():
     update_info= pygame.Rect(185, 515, 145, 45)
     show_all = pygame.Rect(185, 575, 145, 45)
     done = True
-    time.sleep(0.5)
     while done:
-        time.sleep(0.2)
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
