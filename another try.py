@@ -179,6 +179,7 @@ def search_by_food(food,canteens):#canteens is a dictionary
     print ("--Canteen Name-----Stall Name-----Price--" )
     for x in results_array:
         print(x)  #prints each stall in a new line
+    print("")
         
     
 #2        
@@ -266,6 +267,7 @@ def search_by_prices(price_input):
     else:
         for x in results_array:
             print(x)
+        print ("")
 
 #3    
 #--sorts the list of canteen information according to the rank of the canteens--
@@ -422,6 +424,7 @@ def getting_there(CurrentCoordinates, DestiCoordinates):
         print("The shortest walking distance is", round(TotalDistance* 3.2767)," metres." )#converting pixel distance into scaled distance
     print ("---If you prefer taking a bus---")
     busstop(CurrentCoordinates, DestiCoordinates)
+    print ("")
     
     
 
@@ -758,7 +761,7 @@ def display_updateinfo():
 def update_info(cant):
     introScreenImage = pygame.image.load("update.png")
     pygame.display.set_caption("Update menu")
-    screen = pygame.display.set_mode((450,600))
+    screen = pygame.display.set_mode((450,510))
     screen.blit(introScreenImage,(0,0))
     pygame.display.flip()
     stall = pygame.Rect(93, 140, 287, 50)  ##defining the areas to detect mousepress
@@ -853,13 +856,14 @@ def display_all():
     pygame.init()
     introScreenImage = pygame.image.load("all.png")
     pygame.display.set_caption("Showing all canteens")
-    screen = pygame.display.set_mode((450,530))
+    screen = pygame.display.set_mode((450,510))
     screen.blit(introScreenImage,(0,0))
     pygame.display.flip()
     info = pygame.Rect(95, 140, 287, 50)
     all_stalls = pygame.Rect(93, 205, 287, 50)
     single_stall = pygame.Rect(93, 272, 287, 50)
     back = pygame.Rect(159, 355, 145, 45)
+    print ("")
     done = True
     while done:
         for event in pygame.event.get():
