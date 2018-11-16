@@ -61,6 +61,7 @@ stall_info = {'Koufu': [['Western', ['Western','Salad'], '5'],
                                     ['Chinese', ['Chinese', 'Snacks'], '6']]}
              
 #the details of each canteen, irregarding the stalls
+#index 0: name of canteen, index 1: capacity of canteen, index 2: opening hours, index 3: rank of the canteen
 canteen_info = [["Food Court 1", "600PAX",  "7AM-11PM", 5], ["Food Court 2" , "400PAX", "6AM-11PM", 2],
                 ["Food Court 9", "300PAX"," 7AM-10PM", 3], ["Food Court 11","550PAX","8AM-12AM", 4],
                 ["Food Court 13","650PAX","7AM-10PM", 1], ["Food Court 14","450PAX","7AM-10PM", 6],
@@ -83,7 +84,7 @@ canteen_coords= {"Food Court 1": (372, 386),"Food Court 2": (351, 322),"Food Cou
                  "Food Court 16" : (204, 257), "Foodgle Food Court":(340, 100), "North Hill Food Court":(446, 119),\
                  "Pioneer Food Court":(462, 400), "Koufu" : (244, 530), "North Spine" :(204, 390)}
 
-#pointdict needs to be updated
+#pointdict of the deconstructed walking distance map
 PointDictionary = {"Point1": (157,232), "Point2": (108, 365), "Point3": (232, 305), "Point4": (263, 133),
                    "Point5": (437, 89), "Point6": (368, 187), "Point7": (336, 283), "Point8": (500, 244),
                    "Point9": (454, 441), "Point10": (210, 465), "Point11": (294, 504), "Point12": (137, 586)}
@@ -131,7 +132,7 @@ def display_food():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:#detecting mousepress within the hitboxes
                 pos = pygame.mouse.get_pos()
-                if chi.collidepoint(pos):
+                if chi.collidepoint(pos):  #defining the food variable with different inputs to be returned to another function
                     food = "Chinese"
                 elif western.collidepoint(pos):
                     food = "Western"
@@ -156,7 +157,7 @@ def display_food():
                     break
                 else:
                     continue
-                search_by_food(food,stall_info)#calls another function if a hitbox was clicked
+                search_by_food(food,stall_info) #calls another function to search by the food input 
     pygame.quit()
                 
 #--searches the canteens for the chosen food--
@@ -167,12 +168,12 @@ def search_by_food(food,canteens):#canteens is a dictionary
         for i in val:     
             if food in i[1]:   #checking if food is in index one of each element 
                 if key not in canteen_list:
-                    canteen_list.append(key)
+                    canteen_list.append(key)  #creates a list of only the canteens that the food is found in 
                 stall_list = []
                 stall_list.append(key)
-                stall_list.append(i[0])
+                stall_list.append(i[0])   #picking out the name of the stall and the associated price of the stall 
                 stall_list.append(i[2])
-                results_array.append(stall_list)  #creating a list of lists to be printed
+                results_array.append(stall_list)  #creating a list of lists of stalls to be printed
     print("")
     print ("You can find " + food + " in these canteens: " + ', '.join(canteen_list))
     print("")
@@ -205,12 +206,12 @@ def display_price():
     done = True 
     while done:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:    #quitting the programme using the exit button
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:  #detecting mousepress within the hitboxes
                 pos = pygame.mouse.get_pos()
-                if one.collidepoint(pos):
+                if one.collidepoint(pos):   #defining the price variable with different inputs to be returned to another function
                     price = 1
                 elif two.collidepoint(pos):
                     price = 2
@@ -230,7 +231,7 @@ def display_price():
                     price = 9
                 elif ten.collidepoint(pos):
                     price = 10
-                elif more.collidepoint(pos):
+                elif more.collidepoint(pos):   #for price more than 10, the value is 20 as this is the maximum price found in NTU food stalls
                     price = 20
                 elif back.collidepoint(pos):
                     main()
@@ -249,7 +250,7 @@ def search_by_prices(price_input):
             if int(x[2]) <= price_input:
                 results = []
                 results.append(key)
-                results.append(x[0])
+                results.append(x[0])  #selecting the name of the stall and its associated price
                 results.append(x[2])
                 results_array.append(results) #creating a list of lists to be printed
     if len(results_array) == 0:
@@ -257,7 +258,7 @@ def search_by_prices(price_input):
     for num in range(len(results_array)-1):  #first modification of bubblesort
         swapped = False
         for i in range(len(results_array)-num-1):
-            if int(results_array[i][2])>int(results_array[i+1][2]):  #sorting the sublists using their 3rd element
+            if int(results_array[i][2])>int(results_array[i+1][2]):  #sorting the sublists using their 3rd element(which is the price)
                 temp = results_array[i]
                 results_array[i] = results_array[i+1]
                 results_array[i+1] = temp
@@ -276,9 +277,9 @@ def sort_by_rank(list_):
     for num in range(len(list_)-1):
         swapped = False
         for i in range(len(list_)-num-1): #second modification of bubblesort
-            if list_[i][3]>list_[i+1][3]:  #sorting the list of lists using their fourth element
+            if list_[i][3]>list_[i+1][3]:  #sorting the list of lists using their fourth element(rank of the canteens)
                 temp = list_[i]
-                list_[i] = list_[i+1]
+                list_[i] = list_[i+1]       #by default, canteens are sorted from the highest ranked to the lowest ranked
                 list_[i+1] = temp
                 swapped = True
         if not swapped:
@@ -286,7 +287,7 @@ def sort_by_rank(list_):
     results_array = []
     for x in list_:
         results=[]
-        results.append(x[3])
+        results.append(x[3])    #selecting the rank of the canteen and the name of the canteen
         results.append(x[0])
         results_array.append(results)  #similar to search_by_price/food
     for i in results_array:
@@ -304,7 +305,7 @@ def display_distance():
     back = pygame.Rect(20,590,87,35)
     done = True 
     while done:
-        for event in pygame.event.get():
+        for event in pygame.event.get():    #quitting the programme using the exit button
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -318,7 +319,7 @@ def display_distance():
                 pygame.display.update()
                 to_sort = get_elementDist(Coordinates, canteen_coords)
                 print("The nearest canteen is " + str(sort_by_distance(to_sort)[0][0]))
-                print ("---Canteens sorted by distance---")            #sorted by linear distance, not walking distance to simplify things
+                print ("---Canteens sorted by distance---")            #sorted by linear distance, not walking distance
                 for i in sort_by_distance(to_sort):
                     print(i[0]+': '  + str(round(i[1]* 3.2767 )) + " metres")
                 done = False
@@ -388,7 +389,7 @@ def display_map():
     done = True 
     while done:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT: #quitting the programme using the exit button
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -413,7 +414,7 @@ def getting_there(CurrentCoordinates, DestiCoordinates):
     StraightDistance = get_distance(CurrentCoordinates, DestiCoordinates)
     print("---If you prefer walking ---")
     if StraightDistance < 100:  #when distance is short enough, able to approximate in a straight line
-        print("The walking distance is", round(StraightDistance * 3.2767) , " metres.") #converting pixel distance into scaled distance
+        print("The walking distance is", round(StraightDistance * 3.2767) , " metres.") #the factor of 3.2767 is converting pixel distance into scaled distance
     else:
         Point1 = Nearestpoint(CurrentCoordinates)    
         Point2 = Nearestpoint(DestiCoordinates)
@@ -421,14 +422,14 @@ def getting_there(CurrentCoordinates, DestiCoordinates):
         Distance1 = get_distance(PointDictionary[Point1], CurrentCoordinates)
         Distance2 = get_distance(PointDictionary[Point2], DestiCoordinates)
         TotalDistance = Distance1 + Distance2 + PointDistance
-        print("The shortest walking distance is", round(TotalDistance* 3.2767)," metres." )#converting pixel distance into scaled distance
+        print("The shortest walking distance is", round(TotalDistance* 3.2767)," metres." )
     print ("---If you prefer taking a bus---")
     busstop(CurrentCoordinates, DestiCoordinates)
     print ("")
     
     
 
-def Nearestpoint(Coordinates):
+def Nearestpoint(Coordinates): #finding the nearest point to either current location or destination
     list1 = []
     for key in PointDictionary.keys():
         distance = get_distance(Coordinates, PointDictionary[key])
@@ -441,7 +442,7 @@ def Nearestpoint(Coordinates):
 
 
 
-def DistanceCal(PreviousStop, stop, List):
+def DistanceCal(PreviousStop, stop, List): #straight line distance between 2 points
     OldX = PointDictionary[PreviousStop][0]
     OldY = PointDictionary[PreviousStop][1]
     NewX = PointDictionary[stop][0]
@@ -454,7 +455,7 @@ def DistanceCal(PreviousStop, stop, List):
     Distance = Distance2 ** 0.5
     List.append(Distance)
 
-def LoopDistance(Point1, Point2, Loop):
+def LoopDistance(Point1, Point2, Loop): #sum of distance between 2 points in the same loop
     Index1 = Loop.index(Point1)
     Index2 = Loop.index(Point2)
     if Index1 < Index2:
@@ -472,7 +473,7 @@ def LoopDistance(Point1, Point2, Loop):
     list2 = []
     Sum1 = 0
     Sum2 = 0
-    NewList1Index1 = NewList1.index(Point1)
+    NewList1Index1 = NewList1.index(Point1) #we break the loop into 2 routes and see which route is faster
     NewList1Index2 = NewList1.index(Point2)
     NewList2Index1 = NewList2.index(Point1)
     NewList2Index2 = NewList2.index(Point2)
@@ -493,7 +494,7 @@ def LoopDistance(Point1, Point2, Loop):
     else:
         return Sum2
 
-def findconnection(list1, list2):
+def findconnection(list1, list2): #if the points are in different loops, then we find the common points between both lists
     List1 = []
     List2 = []
     Commonlist = []
@@ -514,7 +515,7 @@ def findconnection(list1, list2):
             Commonlist.append(point)
     return Commonlist
 
-def pointdistance(Point1, Point2):
+def pointdistance(Point1, Point2): #finding the distance between 2 points. this will lead to 2 different functions, 1 function if they are in a different loop, another if they are in the same loop
     Loop1 = ("Point1", "Point2", "Point3")
     Loop2 = ("Point1", "Point3", "Point7", "Point6", "Point5", "Point4")
     Loop3 = ("Point2", "Point12", "Point11", "Point10", "Point7", "Point3")
@@ -522,18 +523,18 @@ def pointdistance(Point1, Point2):
     Loop5 = ("Point7", "Point9", "Point8", "Point5", "Point6")
     list1 = []
     list2 = []
-    for loop in [Loop1, Loop2, Loop3, Loop4, Loop5]:
+    for loop in [Loop1, Loop2, Loop3, Loop4, Loop5]: #this portion determines if the 2 points are in same loops or different  loops
         if Point1 in loop:
             list1.append(loop)
         if Point2 in loop:
             list2.append(loop)
     Same = any(x in list1 and x in list2 for x in [Loop1, Loop2, Loop3, Loop4, Loop5])
-    if Same == True:
+    if Same == True: #this leads to a function for calculating distance if the 2 points are in the same loop
         for loop in list1:
             if loop in list2:
                 loopdistance = LoopDistance(Point1, Point2, loop)
                 return loopdistance
-    elif Same == False:
+    elif Same == False: #if the 2 points are in different loops, then we will find distance from common point to destination, and common point to starting point
         Connection = findconnection(list1, list2)
         commonlist = []
         for point in Connection:
@@ -547,14 +548,14 @@ def pointdistance(Point1, Point2):
             commonlist.append(totaldistance)
         return min(commonlist)
 
-def get_distance(CurrentCoordinates, DestiCoordinates):
+def get_distance(CurrentCoordinates, DestiCoordinates): #straight line distance between 2 points, but using a different starting data set
     Xlength = CurrentCoordinates[0] - DestiCoordinates[0]
     X2 = Xlength ** 2
     Ylength = CurrentCoordinates[1] - DestiCoordinates[1]
     Y2 = Ylength ** 2
     Distance2 = float(X2 + Y2)
     Distance = Distance2 ** 0.5
-    return Distance 
+    return Distance  #pythagoras theorem is used here
 
 #advices the bus route from current point to destination point
 def busstop(CurrentCoordinates, DestiCoordinates):
@@ -585,9 +586,9 @@ def busstop(CurrentCoordinates, DestiCoordinates):
     NewBIndex = BlueIndex + 1
     RedIndex = RedList.index(CurrentR)
     NewRIndex = RedIndex + 1
-    NewRList = RedList[NewRIndex:] + RedList[0:RedIndex]
+    NewRList = RedList[NewRIndex:] + RedList[0:RedIndex]    #splicing the busstop list based on the index of the current busstop location
     NewBList = BlueList[NewBIndex:] + BlueList[0:BlueIndex]
-    if CurrentB == DestinationB or CurrentR == DestinationR:
+    if CurrentB == DestinationB or CurrentR == DestinationR:  #situation when the distance is too short to take a bus
         print("The distance is too short to take a bus! Please walk instead :-) ")
     elif NewRList.index(DestinationR) > NewBList.index(DestinationB):  #comparing the differences in bus stops between red and blue lin e
         print ("Walk " + str(round(shortest_dist1_B[1]* 3.2767 )) + " metres to " + CurrentB +\
@@ -599,7 +600,7 @@ def busstop(CurrentCoordinates, DestiCoordinates):
         color = (0, 255, 0)
         pos1 = BusStopBlue[CurrentB]
         pos2 = BusStopBlue[DestinationB]
-        pygame.draw.circle(screen, color , pos1, 15, 3)     #indicates the start and ending bus stops
+        pygame.draw.circle(screen, color , pos1, 15, 3)     #indicates the start and ending bus stops using a green circle
         pygame.draw.circle(screen, color, pos2, 15, 3)
         pygame.display.update()
         pygame.display.flip()
@@ -623,7 +624,7 @@ def busstop(CurrentCoordinates, DestiCoordinates):
         color = (0, 255, 0)
         pos1 = BusStopRed[CurrentR]
         pos2 = BusStopRed[DestinationR]
-        pygame.draw.circle(screen, color , pos1, 15, 3)    #indicates the start and ending bus stops
+        pygame.draw.circle(screen, color , pos1, 15, 3)    #indicates the start and ending bus stops using green circles
         pygame.draw.circle(screen, color, pos2, 15, 3)
         pygame.display.update()
         pygame.display.flip()
@@ -664,7 +665,7 @@ def busstop(CurrentCoordinates, DestiCoordinates):
         screen = pygame.display.set_mode((545,648))
         screen.blit(introScreenImage,(0,0))
         color = (0, 255, 0)
-        pos1 = list1[choice1]   #the list that is accessed depends on the user input
+        pos1 = list1[choice1]   #verying the coordinates of the current/destination bus stops based on either red or blue line
         pos2 = list1[choice2]
         pygame.draw.circle(screen, color , pos1, 15, 3)    #indicates the start and ending bus stops
         pygame.draw.circle(screen, color, pos2, 15, 3)
@@ -711,13 +712,13 @@ def display_canteenlist():
     back = pygame.Rect(158, 523, 145, 45)
     done = True 
     while done:
-        for event in pygame.event.get():
+        for event in pygame.event.get():   #quitting the programme using the exit button
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN: #detecting mousepress within the hitboxes
                 pos = pygame.mouse.get_pos()
-                if fc1.collidepoint(pos):
+                if fc1.collidepoint(pos):   #defining the canteen variable with different inputs to be returned to another function
                     canteen = "Food Court 1"
                 elif fc2.collidepoint(pos):
                     canteen = "Food Court 2"
@@ -776,11 +777,11 @@ def update_info(cant):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                if stall.collidepoint(pos):
+                if stall.collidepoint(pos):     #adding a new stall
                     input_stall = input("What is the name of the stall?:").title()
                     temp = input("What does this store sell? You can enter multiple categories, separated by commas:").title()
                     input_category = list(temp.split(','))
-                    while True:
+                    while True:         #checking for validity of user input
                         try:
                             input_price = input("What is the average price of this stall?:")
                             input_price = int(input_price)
@@ -828,7 +829,7 @@ def update_info(cant):
                         try: 
                             val = int(input_price)
                             if val > 20:
-                                print ("Maximum price is 20!")
+                                print ("Maximum price is 20!")      #setting the maximum price as 20
                             else:
                                 break   
                         except ValueError:
@@ -926,9 +927,9 @@ def main():
     done = True
     while done:
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN: #quitting the programme using the exit button
                 pos = pygame.mouse.get_pos()
-                if food.collidepoint(pos):
+                if food.collidepoint(pos):      #detecting mousepress within the hitboxes
                     display_food()
                 elif price.collidepoint(pos):
                     display_price()
